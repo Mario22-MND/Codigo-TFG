@@ -224,7 +224,7 @@ function boundary_matrix_stiffness!(stiffness_matrix::Matrix{Float64}, element::
     end
 end
 
-#-------------------------------Cuadrilateros-------------------------------#
+#-------------------------------Cuadrilateros (Sin implementar) -------------------------------#
 
 # Funcion que calcula las funciones de base en el cuadrilatero de referencia en base al orden del 
 # cuadrilatero pasado por argumento
