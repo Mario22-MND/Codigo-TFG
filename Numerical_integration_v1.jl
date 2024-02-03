@@ -12,6 +12,11 @@ global FEM_TE = false
 # Funcion que calcula las funciones de base en el triangulo de referencia en base al orden del triangulo
 # pasado por argumento
 function evalFunctionsForReference(gaussX::Float64, gaussY::Float64, element::Mesh_object.Elements.My_triangle)
+    """
+        evalFunctionsForReference(gaussX, gaussY, element)
+
+    Determina las funciones de base del elemento de referencia triangular en función del orden del elemento y los puntos de integración gaussX y gaussY. 
+    """
 
     if element.order==1
         scalar_basis_func = [1-gaussX-gaussY, gaussX, gaussY]
@@ -31,7 +36,11 @@ end
 
 # Funcion que calcula el gradiente de las funciones de base del triangulo de referencia
 function evalGradientFunction(gaussX::Float64, gaussY::Float64, element::Mesh_object.Elements.My_triangle)
+     """
+        evalFunctionsForReference(gaussX, gaussY, element)
 
+    Determina el gradiente de las funciones de base del elemento de referencia triangular en función del orden del elemento y los puntos de integración gaussX y gaussY. 
+    """
     if element.order == 1
         gradient = [-1.0 -1.0 ;
                     1.0 0.0 ;
@@ -61,6 +70,12 @@ end
 
 # Funcion que calcula el Jacobiano del triangulo
 function jacobian_calc(gradient::Matrix{Float64}, coord::Vector{Float64}, element::Mesh_object.Elements.My_triangle)
+     """
+        jacobian_calc(gradient, coord, element)
+
+    Realiza el cálculo del Jacobiano del elemento pasado como argumento y devuelve el propio jacobiano asi como su inversa y el determinante, utilizados luego para 
+    el cálculo de las matrices de masa y rigidez.
+    """
     ∂x_∂ξ = 0.0
     ∂x_∂η = 0.0
     ∂y_∂ξ = 0.0
@@ -86,11 +101,6 @@ function jacobian_calc(gradient::Matrix{Float64}, coord::Vector{Float64}, elemen
     ∂y_∂ξ_2 = -coord[nodes[1]*2] + coord[nodes[2]*2]
     ∂y_∂η_2 = -coord[nodes[1]*2] + coord[nodes[3]*2]
 
-    #=∂x_∂ξ_2 = -coord[nodes[1]*2-1] + coord[nodes[2]*2-1] + coord[nodes[4]*2-1] * gradient[4,1] + coord[nodes[5]*2-1] * gradient[5,1] + coord[nodes[6]*2-1] * gradient[6,1]
-    ∂x_∂η_2 = -coord[nodes[1]*2-1] + coord[nodes[3]*2-1] + coord[nodes[4]*2-1] * gradient[4,2] + coord[nodes[5]*2-1] * gradient[5,2] +  coord[nodes[6]*2-1] * gradient[6,2]
-    ∂y_∂ξ_2 = -coord[nodes[1]*2] + coord[nodes[2]*2] + coord[nodes[4]*2] * gradient[4,1] + coord[nodes[5]*2] * gradient[5,1] + coord[nodes[6]*2] * gradient[6,1]
-    ∂y_∂η_2 = -coord[nodes[1]*2] + coord[nodes[3]*2] + coord[nodes[4]*2] * gradient[4,2] + coord[nodes[5]*2] * gradient[5,2] + coord[nodes[6]*2] * gradient[6,2]=#
-
     # Construir la matriz Jacobiana
     J = [∂x_∂ξ ∂y_∂ξ; 
          ∂x_∂η  ∂y_∂η]
@@ -105,7 +115,11 @@ function jacobian_calc(gradient::Matrix{Float64}, coord::Vector{Float64}, elemen
 end
 
 function boundary_matrix_mass!(mass_matrix::Matrix{Float64}, element::Mesh_object.Elements.My_triangle)
+     """
+        boundary_matrix_mass!(mass_matrix, element)
 
+    Aplica las condiciones de contorno del elemento pasado como argumento a la matriz de masa global 
+    """
    # Comprobamos si tiene la condicion de contorno de DIRICHLET
     if (element.order == 1 || element.order == 2)
         for i in 1:length(element.boundary_egdes)
@@ -165,7 +179,11 @@ function boundary_matrix_mass!(mass_matrix::Matrix{Float64}, element::Mesh_objec
 end
 
 function boundary_matrix_stiffness!(stiffness_matrix::Matrix{Float64}, element::Mesh_object.Elements.My_triangle)
+    """
+        boundary_matrix_stiffness!(stiffness_matrix, element)
 
+    Aplica las condiciones de contorno del elemento pasado como argumento a la matriz de rigidez global 
+    """
     # Comprobamos si tiene la condicion de contorno de DIRICHLET
     if (element.order == 1 || element.order == 2)
         for i in 1:length(element.boundary_egdes)
@@ -229,6 +247,12 @@ end
 # Funcion que calcula las funciones de base en el cuadrilatero de referencia en base al orden del 
 # cuadrilatero pasado por argumento
 function evalFunctionsForReference(gaussX::Float64, gaussY::Float64, element::Mesh_object.Elements.My_quad)
+    """
+        evalFunctionsForReference(gaussX, gaussY, element)
+
+    Determina las funciones de base del elemento de referencia en cuadrilateros en función del orden del elemento y los puntos de integración gaussX y gaussY.
+    (Sin implementar)
+    """
     scalar_basis_func = Vector{Float64}()
     if element.order==1
         scalar_basis_func = [1-gaussX-gaussY, gaussX, gaussY]
@@ -241,6 +265,13 @@ end
 
 # Funcion que calcula el gradiente de las funciones de base del cuadrilatero de referencia
 function evalGradientFunction(gaussX::Float64, gaussY::Float64, scalar_basis_func::Vector{Float64}, element::Mesh_object.Elements.My_quad)
+    """
+        evalFunctionsForReference(gaussX, gaussY, element)
+
+    Determina el gradiente de las funciones de base del elemento de referencia triangular en función del orden del elemento y los puntos de integración 
+    gaussX y gaussY. 
+    (Sin implementar)
+    """
     gradient = Vector{Float64}(undef, length(scalar_basis_func)*2)
 
     if element.order==1
@@ -254,6 +285,13 @@ end
 
 # Funcion que calcula el Jacobiano del cuadrilatero
 function jacobian_calc(gradient::Vector{Float64}, coord::Vector{Float64}, element::Mesh_object.Elements.My_quad)
+    """
+        jacobian_calc(gradient, coord, element)
+
+    Realiza el cálculo del Jacobiano del elemento pasado como argumento y devuelve el propio jacobiano asi como su inversa y el determinante, utilizados luego para 
+    el cálculo de las matrices de masa y rigidez.
+    (Sin implementar)
+    """
     ∂x_∂ξ = 0.0
     ∂x_∂η = 0.0
     ∂y_∂ξ = 0.0
@@ -320,7 +358,12 @@ end
 
 # Funcion que calcula la matriz de masa por elemento
 function get_local_mass_matrix(n_gauss::Matrix{Float64}, w_gauss::Vector{Float64}, element::Mesh_object.Elements.Element)
+    """
+        get_local_mass_matrix(n_gauss, w_gauss, element)
 
+    Realiza el cálculo de la matriz de masa local al elemento pasado como argumento según los puntos de integración (n_gauss) y los pesos
+    (w_gauss) correspondientes.
+    """
     # Inicializar la matriz de masa
     mass_matrix = zeros(Float64, length(element.dof), length(element.dof))
 
@@ -343,6 +386,11 @@ end
 
 # Funcion que calcula la matriz de masa total
 function assemble_global_mass_matrix!(global_mass_matrix::Matrix{Float64}, local_mass_matrix::Matrix{Float64}, element::Mesh_object.Elements.Element)
+    """
+        assemble_global_mass_matriz(global_mass_matriz, local_mass_matrix, element)
+
+    Suma la contribución de la matriz de masa local al elemento pasado como arguemnto a la matriz de masa global.
+    """
     for i in 1:length(element.dof)
         for j in 1:length(element.dof)
             global_mass_matrix[element.dof[i], element.dof[j]] += local_mass_matrix[i, j]
@@ -354,7 +402,12 @@ end
 
 # Funcion que calcula la matriz de rigidez por elemento
 function get_local_stiffness_matrix(n_gauss::Matrix{Float64}, w_gauss::Vector{Float64}, element::Mesh_object.Elements.Element)
+    """
+        get_local_stiffness_matrix(n_gauss, w_gauss, element)
 
+    Realiza el cálculo de la matriz de rigidez local al elemento pasado como argumento según los puntos de integración (n_gauss) y los pesos
+    (w_gauss) correspondientes.
+    """
     # Inicializar la matriz de rigidez
     stiffness_matrix = zeros(Float64, length(element.dof), length(element.dof))
 
@@ -378,7 +431,11 @@ end
 
 # Funcion que calcula la matriz de rigidez total
 function assemble_global_stiffness_matrix!(global_stiffness_matrix::Matrix{Float64}, local_stiffness_matrix::Matrix{Float64}, element::Mesh_object.Elements.Element)
+    """
+        assemble_global_mass_matriz(global_mass_matriz, local_mass_matrix, element)
 
+    Suma la contribución de la matriz de rigidez local al elemento pasado como argumento a la matriz de rigidez global.
+    """
     # Ensamblar la matriz de rigidez local en la matriz de rigidez global
     for i in 1:length(element.dof)
         for j in 1:length(element.dof)
@@ -430,7 +487,7 @@ end
 
 eigenv = eigen( global_stiffness_matrix, global_mass_matrix)
 
-# Para comprobar
+# Para comprobar, deben salir todos los autovalores positivos.
 val_mass = real(eigvals(global_mass_matrix))
 val_stiff = real(eigvals(global_stiffness_matrix))
 
@@ -438,28 +495,6 @@ k_c_fem = real(eigenv.values)
 
 # Definimos el k_c^2 analitico
 k_c_analytic = Vector{Float64}()
-
-# Funcion que calcula los k_c^2 analiticos hasta los modos 4,4
-function k_analytic(k_c_analytic::Vector{Float64})
-    for i in 0:3
-        for j in 0:3
-            k_c_analytic_i = (((i*pi)/Mesh_object.Rect_waveguide_triangles.a)^2+((j*pi)/Mesh_object.Rect_waveguide_triangles.b)^2)
-            push!(k_c_analytic, k_c_analytic_i)
-        end
-    end
-
-    length_kc_analytic = length(k_c_analytic)
-    k_c_analytic = k_c_analytic[2:length_kc_analytic]
-    #= k_c_analytic = [k_c_analytic[1], k_c_analytic[5], k_c_analytic[6], k_c_analytic[6],
-                    k_c_analytic[2], k_c_analytic[10], k_c_analytic[7], k_c_analytic[11], k_c_analytic[12], k_c_analytic[12],
-                    k_c_analytic[3], k_c_analytic[15], k_c_analytic[8], k_c_analytic[16], k_c_analytic[13], k_c_analytic[17], k_c_analytic[18], k_c_analytic[18],
-                    k_c_analytic[4], k_c_analytic[20], k_c_analytic[9], k_c_analytic[21], k_c_analytic[14], k_c_analytic[22], k_c_analytic[19], k_c_analytic[23], k_c_analytic[24], k_c_analytic[24]]
-    =#
-    k_c_analytic = sort(k_c_analytic)
-    return k_c_analytic
-end
-
-
 
 # Calculamos los k_C^2 analiticos
 #k_c_analytic = k_analytic(k_c_analytic)
@@ -474,21 +509,11 @@ sort!(k_c_analytic)
 # Funcion que calcula el error relativo
 rel_error = Vector{Float64}()
 function rel_err!(k_c_fem::Vector{Float64}, k_c_analytic::Vector{Float64}, rel_error::Vector{Float64})
+    """
+        rel_err!(k_c_fem, k_c_analytic, rel_error
 
-    #=l_analytic = length(k_c_analytic)
-    l_fem = length(k_c_fem)
-
-    l_total = 0
-    if l_fem >= l_analytic
-        l_total = l_analytic
-    else
-        l_total = l_fem
-    end
-
-    for i in 1:l_total
-        error = (k_c_fem[i]-k_c_analytic[i])/k_c_analytic[i]
-        push!(rel_error, error)
-    end=#
+    Calcula el error relativo del k_c^2 calculado con el código comparandolo con el k_c^2 analítico.
+    """
     if FEM_TE == true
         error = abs((k_c_fem[2]-k_c_analytic[1])/k_c_analytic[1])
     else
@@ -500,12 +525,5 @@ function rel_err!(k_c_fem::Vector{Float64}, k_c_analytic::Vector{Float64}, rel_e
 end
 
 rel_err!(k_c_fem, k_c_analytic, rel_error)
-
-#= Comprobaciones
-
-b = ones(Float64, Mesh_object.total_dofs)
-
-x = inv(global_mass_matrix)*b
-y = inv(global_stiffness_matrix)*b =#
 
 end
