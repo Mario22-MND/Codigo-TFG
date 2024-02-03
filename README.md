@@ -9,10 +9,10 @@ En este repositorio se muestra el código creado para construir un simulador 2D 
 - [Futuras ampliaciones](#futurasAmpliaciones)
 
 # Instalación
-Para poder utilizar el código debes instalar varios paquetes de Julia e importar la  API de Gmsh. Los paquetes o librerias a instalar son: 
+Para poder utilizar el código debes instalar varios paquetes de Julia e importar la  API de Gmsh. Los paquetes o librerías a instalar son: 
 - LinearAlgebra: Para obtener los autovalores y autovectores de la matriz de masa y rigidez
 - SimplexQuad (https://github.com/eschnett/SimplexQuad.jl)
-- Plots: para representar las mallas, asi como los resultados finales
+- Plots: para representar las mallas, así como los resultados finales
 - LaTeXStrings: para personalizar de manera matemática nuestros gráficos
 
 ## API de Gmsh
@@ -31,7 +31,7 @@ Este archivo startup.jl se utiliza para realizar configuraciones personalizadas 
 inicies Julia. Como último paso habría que reiniciar Julia.
 
 # Uso
-El código consta de una serie de modulos, donde el principal es el denominado "Numerical_integration_v1.jl". Este se encarga de llamar a "Mesh_object.jl" que a su vez llama a todos los demás. Las dependencias de los modulos se muestran en la siguiente imagen:
+El código consta de una serie de módulos, donde el principal es el denominado "Numerical_integration_v1.jl". Este se encarga de llamar a "Mesh_object.jl" que a su vez llama a todos los demás. Las dependencias de los módulos se muestran en la siguiente imagen:
 
 ![dependencias_código](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/2b5e0d2e-07d6-4e69-8abd-a097c1722f26)
 
@@ -41,16 +41,16 @@ Donde las flechas muestran de quién obtine la información o de quién depende.
 Estos dos fragmentos de código utilizan la API de Gmsh en Julia para la creación del objeto a utilizar. De ellas obtenos información importante como los nodos, las coordenadas de los mismos, los grupos físicos (condiciones de contorno), etc.
 
 ## Elements.jl
-Este módulo se utiliza para guardar los diferentes tipos de elementos. Se han implementado ambos elementos, triangulos y quads. Aun asi no se ha realizado l orientación de quads, que queda pendiente para futuros trabajos. En este modulo se llama a "Elements_order.jl" donde se guarda el orden de los elementos transformandolo a un formato legible a partir de los códigos internos de Gmsh mostrados en esta página web: https://docs.juliahub.com/GmshTools/9rYp5/0.4.2/element_types/ .
+Este módulo se utiliza para guardar los diferentes tipos de elementos. Se han implementado ambos elementos, triangulos y quads. Aun así no se ha realizado l orientación de quads, que queda pendiente para futuros trabajos. En este módulo se llama a "Elements_order.jl" donde se guarda el orden de los elementos transformandolo a un formato legible a partir de los códigos internos de Gmsh mostrados en esta página web: https://docs.juliahub.com/GmshTools/9rYp5/0.4.2/element_types/ .
 
 ## Material.jl
 Gracias a este módulo se pueden guardar los diversos materiales de los que se compone la malla. Será util para futuros trabajos donde se analicen mallas genéricas. De momento no tiene influencia en el código.
 
 ## Boundary_cond.jl
-En este módulo guardamos las condiciones de contorno presentes en la malla asi como todos los nodos que la sufren. Este modulo se utiliza para poder comprobar que nodos del elemento tienen determinada condición de contorno.
+En este módulo guardamos las condiciones de contorno presentes en la malla así como todos los nodos que la sufren. Este módulo se utiliza para poder comprobar que nodos del elemento tienen determinada condición de contorno.
 
 ## Mesh_object.jl
-Aqui se obtiene toda la información importante para ensamblar la malla. Se crean los elementos donde se tienen en cuenta las condiciones de contorno, se les asigna los grados de libertad, ect. Se guardan tambien los materiales de los que esta compuesta la malla asi como todas las coordenadas de los nodos que la componen.
+Aqui se obtiene toda la información importante para ensamblar la malla. Se crean los elementos donde se tienen en cuenta las condiciones de contorno, se les asigna los grados de libertad, ect. Se guardan tambien los materiales de los que esta compuesta la malla así como todas las coordenadas de los nodos que la componen.
 
 Toda esta información será necesaría para realizar los calculos en "Numerical_integration_v1.jl".
 
@@ -79,4 +79,4 @@ Este módulo se utiliza para graficar lso resultados y realizar comprobaciones s
 ![Mode_TM](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/b3a7919a-edba-4cfd-aba0-0469e59ad6ed)
 
 # Futuras Ampliaciones
-El código se puede ampliar implementando las partes del código dedicadas a los cuadriláteros, asi como implementando el uso de los materiales para poder resolver guias genéricas.
+El código se puede ampliar implementando las partes del código dedicadas a los cuadriláteros, así como implementando el uso de los materiales para poder resolver guias genéricas.
