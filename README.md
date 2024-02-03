@@ -72,7 +72,7 @@ Con los autovalores obtenidos, calculamos el error relativo, el cual disminuye a
   ![resultado_modos_TM](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/eaf11dc1-6092-47f8-9fae-81f0b001d839)
 
 ### Plot_results.jl
-Este módulo se utiliza para graficar lso resultados y realizar comprobaciones sobre ellos. Aqui se ha comprobado que la tasa de convergencia del error es O(h^2p).
+Este módulo se utiliza para graficar los resultados y realizar comprobaciones sobre ellos. Aqui se ha comprobado que la tasa de convergencia del error es O(h^2p).
 
 ![Mode_TE](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/159bb6d6-a2c8-4664-ac10-9a783ff31b60)
 
