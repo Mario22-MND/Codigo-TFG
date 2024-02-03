@@ -11,7 +11,7 @@ En este repositorio se muestra el código creado para construir un simulador 2D 
 # Instalación
 Para poder utilizar el código debes instalar varios paquetes de Julia e importar la  API de Gmsh. Los paquetes o librerías a instalar son: 
 - LinearAlgebra: Para obtener los autovalores y autovectores de la matriz de masa y rigidez
-- SimplexQuad (https://github.com/eschnett/SimplexQuad.jl)
+- SimplexQuad (https://github.com/eschnett/SimplexQuad.jl): nos permite obtener los puntos de integración y los pessos según la cuadratura de Gauss-Radau.
 - Plots: para representar las mallas, así como los resultados finales
 - LaTeXStrings: para personalizar de manera matemática nuestros gráficos
 
