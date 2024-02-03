@@ -6,6 +6,7 @@ En este repositorio se muestra el código creado para construir un simulador 2D 
 
 - [Instalación](#instalación)
 - [Uso](#uso)
+- [Futuras ampliaciones](#futurasAmpliaciones)
 
 # Instalación
 Para poder utilizar el código debes instalar varios paquetes de Julia e importar la  API de Gmsh. Los paquetes o librerias a instalar son: 
@@ -76,3 +77,6 @@ Este módulo se utiliza para graficar lso resultados y realizar comprobaciones s
 ![Mode_TE](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/159bb6d6-a2c8-4664-ac10-9a783ff31b60)
 
 ![Mode_TM](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/b3a7919a-edba-4cfd-aba0-0469e59ad6ed)
+
+# Futuras Ampliaciones
+El código se puede ampliar implementando las partes del código dedicadas a los cuadriláteros, asi como implementando el uso de los materiales para poder resolver guias genéricas.
