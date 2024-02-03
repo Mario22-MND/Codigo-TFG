@@ -5,6 +5,7 @@ using SimplexQuad
 
 include("Mesh_object.jl")
 
+# Este atributo determina si se quiere calcular modos TE o modos TM
 global FEM_TE = false
 
 #-------------------------------Triangulos-------------------------------#
