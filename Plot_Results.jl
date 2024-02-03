@@ -1,4 +1,5 @@
 using Plots
+using LaTeXStrings
 
 include("Numerical_integration_v1.jl")
 
@@ -107,31 +108,107 @@ if Numerical_integration.FEM_TE == true
     plot!(x_values, rel_error_result_1, label="Orden 1", marker=:circle, linestyle=:solid)
     plot!(x_values, rel_error_result_2, label="Orden 2", marker=:circle, linestyle=:solid)
     plot!(x_values, rel_error_result_3, label="Orden 3", marker=:circle, linestyle=:solid)
-    xlabel!("1/h")
-    ylabel!("Relative Error")   
+    xlabel!(L"1/h")
+    ylabel!(L"relerr_{avg}")   
     title!("Modos TE - Error relativo vs Tamaño malla")
     ylims!(10e-15, 1.0)
-    savefig("Results_images\\Mode_TE.png")
+    
 else
     plot!(x_values, rel_error_result_1, label="Orden 1", marker=:circle, linestyle=:solid)
     plot!(x_values, rel_error_result_2, label="Orden 2", marker=:circle, linestyle=:solid)
     plot!(x_values, rel_error_result_3, label="Orden 3", marker=:circle, linestyle=:solid)
-    xlabel!("1/h")
-    ylabel!("Relative Error")   
+    xlabel!(L"1/h")
+    ylabel!(L"relerr_{avg}")   
     title!("Modos TM - Error relativo vs Tamaño malla")
     ylims!(10e-15, 1.0)
-    savefig("Results_images\\Mode_TM.png")
+    
 end
 
 # Comprobar la pendiente para los diferentes nodos
 if Numerical_integration.FEM_TE == true
-    pen_1_TE = (log10(rel_error_result_1[2])-log10(rel_error_result_1[1]))/(log10(x_values[2])-log10(x_values[1]))
-    pen_2_TE = (log10(rel_error_result_2[2])-log10(rel_error_result_2[1]))/(log10(x_values[2])-log10(x_values[1]))
-    pen_3_TE = (log10(rel_error_result_3[2])-log10(rel_error_result_3[1]))/(log10(x_values[2])-log10(x_values[1]))
+    pen_1_TE = abs((log10(rel_error_result_1[4])-log10(rel_error_result_1[3]))/(log10(x_values[4])-log10(x_values[3])))
+    pen_2_TE = abs((log10(rel_error_result_2[4])-log10(rel_error_result_2[3]))/(log10(x_values[4])-log10(x_values[3])))
+    pen_3_TE = abs((log10(rel_error_result_3[4])-log10(rel_error_result_3[3]))/(log10(x_values[4])-log10(x_values[3])))
 else
-    pen_1_TM = (log10(rel_error_result_1[4])-log10(rel_error_result_1[3]))/(log10(x_values[4])-log10(x_values[3]))
-    pen_2_TM = (log10(rel_error_result_2[4])-log10(rel_error_result_2[3]))/(log10(x_values[4])-log10(x_values[3]))
-    pen_3_TM = (log10(rel_error_result_3[4])-log10(rel_error_result_3[3]))/(log10(x_values[4])-log10(x_values[3]))
+    pen_1_TM = abs((log10(rel_error_result_1[4])-log10(rel_error_result_1[3]))/(log10(x_values[4])-log10(x_values[3])))
+    pen_2_TM = abs((log10(rel_error_result_2[4])-log10(rel_error_result_2[3]))/(log10(x_values[4])-log10(x_values[3])))
+    pen_3_TM = abs((log10(rel_error_result_3[4])-log10(rel_error_result_3[3]))/(log10(x_values[4])-log10(x_values[3])))
 end
+
+# Graficamos la pendiente esperada
+error_expected_1_TE = Vector{Float64}()
+error_expected_2_TE = Vector{Float64}()
+error_expected_3_TE = Vector{Float64}()
+
+error_expected_1_TM = Vector{Float64}()
+error_expected_2_TM = Vector{Float64}()
+error_expected_3_TM = Vector{Float64}()
+if Numerical_integration.FEM_TE == true
+    push!(error_expected_1_TE, rel_error_result_1[4])
+    error_expected_1 = 10^(2*1*(log10(x_values[4])-log10(x_values[3]))+log10(error_expected_1_TE[1]))
+    push!(error_expected_1_TE, error_expected_1)
+    error_expected_1 = 10^(2*1*(log10(x_values[4])-log10(x_values[2]))+log10(error_expected_1_TE[1]))
+    push!(error_expected_1_TE, error_expected_1)
+    error_expected_1 = 10^(2*1*(log10(x_values[4])-log10(x_values[1]))+log10(error_expected_1_TE[1]))
+    push!(error_expected_1_TE, error_expected_1)
+    sort!(error_expected_1_TE, rev=true)
+
+
+    push!(error_expected_2_TE, rel_error_result_2[4])
+    error_expected_1 = 10^(2*2*(log10(x_values[4])-log10(x_values[3]))+log10(error_expected_2_TE[1]))
+    push!(error_expected_2_TE, error_expected_1)
+    error_expected_1 = 10^(2*2*(log10(x_values[4])-log10(x_values[2]))+log10(error_expected_2_TE[1]))
+    push!(error_expected_2_TE, error_expected_1)
+    error_expected_1 = 10^(2*2*(log10(x_values[4])-log10(x_values[1]))+log10(error_expected_2_TE[1]))
+    push!(error_expected_2_TE, error_expected_1)
+    sort!(error_expected_2_TE, rev=true)
+
+    push!(error_expected_3_TE, rel_error_result_3[4])
+    error_expected_1 = 10^(2*3*(log10(x_values[4])-log10(x_values[3]))+log10(error_expected_3_TE[1]))
+    push!(error_expected_3_TE, error_expected_1)
+    error_expected_1 = 10^(2*3*(log10(x_values[4])-log10(x_values[2]))+log10(error_expected_3_TE[1]))
+    push!(error_expected_3_TE, error_expected_1)
+    error_expected_1 = 10^(2*3*(log10(x_values[4])-log10(x_values[1]))+log10(error_expected_3_TE[1]))
+    push!(error_expected_3_TE, error_expected_1)
+    sort!(error_expected_3_TE, rev=true)
+
+    plot!(x_values, error_expected_1_TE, label=L"O(h^{2p}), p=1", marker=:square, linestyle=:dash)
+    plot!(x_values, error_expected_2_TE, label=L"O(h^{2p}), p=2", marker=:square, linestyle=:dash)
+    plot!(x_values, error_expected_3_TE, label=L"O(h^{2p}), p=3", marker=:square, linestyle=:dash)
+    savefig("Results_images\\Mode_TE.png")
+else
+    push!(error_expected_1_TM, rel_error_result_1[4])
+    error_expected_1 = 10^(2*1*(log10(x_values[4])-log10(x_values[3]))+log10(error_expected_1_TM[1]))
+    push!(error_expected_1_TM, error_expected_1)
+    error_expected_1 = 10^(2*1*(log10(x_values[4])-log10(x_values[2]))+log10(error_expected_1_TM[1]))
+    push!(error_expected_1_TM, error_expected_1)
+    error_expected_1 = 10^(2*1*(log10(x_values[4])-log10(x_values[1]))+log10(error_expected_1_TM[1]))
+    push!(error_expected_1_TM, error_expected_1)
+    sort!(error_expected_1_TM, rev=true)
+
+    push!(error_expected_2_TM, rel_error_result_2[4])
+    error_expected_1 = 10^(2*2*(log10(x_values[4])-log10(x_values[3]))+log10(error_expected_2_TM[1]))
+    push!(error_expected_2_TM, error_expected_1)
+    error_expected_1 = 10^(2*2*(log10(x_values[4])-log10(x_values[2]))+log10(error_expected_2_TM[1]))
+    push!(error_expected_2_TM, error_expected_1)
+    error_expected_1 = 10^(2*2*(log10(x_values[4])-log10(x_values[1]))+log10(error_expected_2_TM[1]))
+    push!(error_expected_2_TM, error_expected_1)
+    sort!(error_expected_2_TM, rev=true)
+
+    push!(error_expected_3_TM, rel_error_result_3[4])
+    error_expected_1 = 10^(2*3*(log10(x_values[4])-log10(x_values[3]))+log10(error_expected_3_TM[1]))
+    push!(error_expected_3_TM, error_expected_1)
+    error_expected_1 = 10^(2*3*(log10(x_values[4])-log10(x_values[2]))+log10(error_expected_3_TM[1]))
+    push!(error_expected_3_TM, error_expected_1)
+    error_expected_1 = 10^(2*3*(log10(x_values[4])-log10(x_values[1]))+log10(error_expected_3_TM[1]))
+    push!(error_expected_3_TM, error_expected_1)
+    sort!(error_expected_3_TM, rev=true)
+
+    plot!(x_values, error_expected_1_TM, label=L"O(h^{2p}), p=1", marker=:square, linestyle=:dash)
+    plot!(x_values, error_expected_2_TM, label=L"O(h^{2p}), p=2", marker=:square, linestyle=:dash)
+    plot!(x_values, error_expected_3_TM, label=L"O(h^{2p}), p=3", marker=:square, linestyle=:dash)
+    savefig("Results_images\\Mode_TM.png")
+end
+
 
 
