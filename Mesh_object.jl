@@ -25,6 +25,11 @@ mesh_elements = Vector{Elements.Element}()
 
 # Funcion que obtiene todos los materiales de la malla
 function get_all_materials(materials_names::Vector{Tuple{Int32, String}})
+    """
+        get_all_materials(materials_names)
+
+    Obtiene todos los materiales de la malla 
+    """
     for materials in materials_names
         material = Material.My_material(materials[1], materials[2], 0.0, 0.0)
         push!(mesh_materials, material)
@@ -40,6 +45,11 @@ end
 
 # Funcion que obtiene todas las condiciones de contorno
 function get_all_boundary_cond(boundary_names::Vector{Tuple{Int32, String}}, groups::Vector{Tuple{Int32, Vector{UInt64}}})
+     """
+        get_all_boundary_cond(boundary_names, groups)
+
+    Obtiene todas las condiciones de contorno de la malla, asi como los nodos que las componen 
+    """
     for boundarys in boundary_names
         nodes = Vector{UInt64}()
         for group in groups
@@ -51,8 +61,6 @@ function get_all_boundary_cond(boundary_names::Vector{Tuple{Int32, String}}, gro
             type = Boundary_cond.DIRICHLET
         elseif boundarys[2] == "NEUMAN"
             type = Boundary_cond.NEUMAN
-        elseif boundarys[2] == "CAUCHY"
-            type = Boundary_cond.CAUCHY
         end
     boundary = Boundary_cond.Boundary_condition(boundarys[1], type, nodes)
     push!(mesh_cond, boundary)
@@ -68,6 +76,11 @@ end
 
 # Funcion que guarda las coordenadas x e y de todos los nodos de la malla en mesh_coord_2D
 function get_all_coordenates(coord::Vector{Float64})
+     """
+        get_all_coordenates(coord)
+
+    Guarda las coordenadas 2D de todos los nodos de la malla con la siguiente estructura: {n1x, n1y, n2x, n2y, ...} 
+    """
 
     # Coord contiene las coordenadas completas con {n1x, n1y, n1z, n2x, n2y, n2z, ...}
 
@@ -90,6 +103,11 @@ end
 
 # Funcion para determinar el numero de nodos segun el orden del elemento
 function evaluate_order(orden::Int32)
+    """
+        evaluate_order(orden)
+
+    Determina el número de nodos que tiene el elemento según su orden 
+    """        
     switch_dict = Dict(
         2 => 3,
         9 => 6,
@@ -107,6 +125,11 @@ end
 
 # Funcion para determinar que nodos pertenecen a las condiciones de contorno
 function get_boundary_nodes(element::Elements.Element, boundary_conditions::Vector{Boundary_cond.Boundary_condition})
+    """
+        get_boundary_nodes(element, boundary_conditions)
+
+    Determina que nodos dentro del argumento "element" cumplen las condiciones de contorno  
+    """
     if isa(element, Elements.My_triangle)
         edge_1 = [element.nodes[1], element.nodes[2]]
         edge_2 = [element.nodes[1], element.nodes[3]]
@@ -147,6 +170,11 @@ end
 
 # Funcion que guarda todos los elementos de la malla en mesh_elements
 function get_all_elements(elementType::Vector{Int32}, elemtTags::Vector{Vector{UInt64}}, nodeTags::Vector{Vector{UInt64}})
+    """
+        get_all_elements(elementType, elemtTags, nodeTags)
+
+    Crea y guarda todos los elementos en el atributo "mesh_elements" junto con toda su información. 
+    """
     for i in eachindex(elementType)
         if elementType[i] == Elements_order.GMSH_TRIA_ORDER_1 || elementType[i] == Elements_order.GMSH_TRIA_ORDER_2 || elementType[i] == Elements_order.GMSH_TRIA_ORDER_3
             # Numero de nodos por elemento 
@@ -207,6 +235,11 @@ end
 
 # Funcion que guarda los dof en cada elemento
 function get_all_dofs(elements::Vector{Elements.Element}) 
+    """
+        get_all_dofs(elements)
+
+    Asigna los grados de libertad a todos los nodos de la malla y devuelve el número de grados de libertad (dofs). 
+    """
     shared_edges = Dict{Vector{Int64}, Int64}()
     shared_nodes = Dict{Int64, Int64}()
     cont = 0
