@@ -41,18 +41,18 @@ Donde las flechas muestran de quién obtine la información o de quién depende.
 Estos dos fragmentos de código utilizan la API de Gmsh en Julia para la creación del objeto a utilizar. De ellas obtenos información importante como los nodos, las coordenadas de los mismos, los grupos físicos (condiciones de contorno), etc.
 
 ## Elements.jl
-Este módulo se utiliza para guardar los diferentes tipos de elementos. Se han implementado ambos elementos, triangulos y quads. Aun así no se ha realizado l orientación de quads, que queda pendiente para futuros trabajos. En este módulo se llama a "Elements_order.jl" donde se guarda el orden de los elementos transformandolo a un formato legible a partir de los códigos internos de Gmsh mostrados en esta página web: https://docs.juliahub.com/GmshTools/9rYp5/0.4.2/element_types/ .
+Este módulo se utiliza para guardar los diferentes tipos de elementos. Se han implementado ambos elementos, triangulos y quads. Aun así, no se ha realizado la orientación de quads,la cual que queda pendiente para futuros trabajos. En este módulo se llama a "Elements_order.jl" donde se guarda el orden de los elementos transformándolo a un formato legible a partir de los códigos internos de Gmsh mostrados en esta página web: https://docs.juliahub.com/GmshTools/9rYp5/0.4.2/element_types/ .
 
 ## Material.jl
-Gracias a este módulo se pueden guardar los diversos materiales de los que se compone la malla. Será util para futuros trabajos donde se analicen mallas genéricas. De momento no tiene influencia en el código.
+Gracias a este módulo se pueden guardar los diversos materiales de los que se compone la malla. Será útil para futuros trabajos donde se analicen mallas genéricas. De momento no tiene influencia en el código.
 
 ## Boundary_cond.jl
 En este módulo guardamos las condiciones de contorno presentes en la malla así como todos los nodos que la sufren. Este módulo se utiliza para poder comprobar que nodos del elemento tienen determinada condición de contorno.
 
 ## Mesh_object.jl
-Aqui se obtiene toda la información importante para ensamblar la malla. Se crean los elementos donde se tienen en cuenta las condiciones de contorno, se les asigna los grados de libertad, ect. Se guardan tambien los materiales de los que esta compuesta la malla así como todas las coordenadas de los nodos que la componen.
+Aqui se obtiene toda la información importante para ensamblar la malla. Se crean los elementos donde se tienen en cuenta las condiciones de contorno, se les asigna los grados de libertad, ect. Se guardan también los materiales de los que esta compuesta la malla así como todas las coordenadas de los nodos que la componen.
 
-Toda esta información será necesaría para realizar los calculos en "Numerical_integration_v1.jl".
+Toda esta información será necesaría para realizar los cálculos en "Numerical_integration_v1.jl".
 
 ### Mesh_plot.jl
 En este módulo se crea un gráfico de la malla ensamblada utilizando toda la información creada y obtenida en "Mesh_object.jl". A continuación se muestran ejemplos de algunas mallas, de orden 1 y orden 2:
@@ -62,7 +62,7 @@ En este módulo se crea un gráfico de la malla ensamblada utilizando toda la in
 ![triangular_mesh_order_2_boundary_1](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/2c6c1603-00d9-4976-86e7-a3ff2871cfb7)
 
 ## Numerical_integration_v1.jl
-Este es el módulo main, ya que es donde se realizan todos los calculos con la información obtenida hasta ahora y donde se obtienen los resultados finales. En el se calculan las matrices de masa y rigidez utilizadas para obtener los autovalores. Se puede elegir mediante el atributo 'FEM_TE' si se quiere calcular los modos TE o modos TM. 
+Este es el módulo main, ya que es donde se realizan todos los cálculos con la información obtenida hasta ahora y donde se obtienen los resultados finales. En el se calculan las matrices de masa y rigidez utilizadas para obtener los autovalores. Se puede elegir mediante el atributo 'FEM_TE' si se quiere calcular los modos TE o modos TM. 
 
 Con los autovalores obtenidos, calculamos el error relativo, el cual disminuye a medida que aumentamos el orden de los elementos y hacemos la malla más fina con el atributo 'tm' del módulo "Rect_waveguide_triangles.jl". Debemos tener en cuenta dos puntos a la hora de calcular el error relativo en función de si calculamos modos TE o TM:
 - Modos TE: el primer valor obtenido en 'k_c_fem' se utiliza como referencia, el segundo es el correspondiente al modo TE_10
