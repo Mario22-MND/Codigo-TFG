@@ -50,3 +50,16 @@ Gracias a este módulo se pueden guardar los diversos materiales de los que se c
 En este módulo guardamos las condiciones de contorno presentes en la malla asi como todos los nodos que la sufren. Este modulo se utiliza para poder comprobar que nodos del elemento tienen determinada condición de contorno.
 
 ## Mesh_object.jl
+Aqui se obtiene toda la información importante para ensamblar la malla. Se crean los elementos donde se tienen en cuenta las condiciones de contorno, se les asigna los grados de libertad, ect. Se guardan tambien los materiales de los que esta compuesta la malla asi como todas las coordenadas de los nodos que la componen.
+
+Toda esta información será necesaría para realizar los calculos en "Numerical_integration_v1.jl".
+
+### Mesh_plot.jl
+En este módulo se crea un gráfico de la malla ensamblada utilizando toda la información creada y obtenida en "Mesh_object.jl". A continuación se muestran ejemplos de algunas mallas, de orden 1 y orden 2:
+
+![triangular_mesh_order_1_boundary_1](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/4d66a5eb-a339-4931-8c25-b615d9f5d46b)
+
+![triangular_mesh_order_2_boundary_1](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/2c6c1603-00d9-4976-86e7-a3ff2871cfb7)
+
+## Numerical_integration_v1.jl
+Este es el módulo main, ya que es donde se realizan todos los calculos con la información obtenida hasta ahora y donde se obtienen los resultados finales. En el se calculan las matrices de masa y rigidez utilizadas para obtener los autovalores.
