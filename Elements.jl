@@ -25,7 +25,7 @@ struct My_triangle <: Element
             throw(ArgumentError("El triangulo debe tener orden 1, 2 o 3"))
         end
 
-        # Determinar las aristas de los elementos
+        # Orientar los elementos
         ord_nodes = sort(nodes[1:3])
         if order == 1
             nodes = ord_nodes
@@ -85,38 +85,8 @@ struct My_quad <: Element
             throw(ArgumentError("El cuadrado debe tener orden 1 o 2"))
         end
 
-        #= Determinar las aristas de los elementos
-        ord_nodes = sort(nodes[1:4])
-        if order == 1
-            nodes = ord_nodes
-        elseif order == 2
-            if ord_nodes[1] == nodes[1] 
-                if ord_nodes[2] == nodes[4]
-                    new_nodes = vcat(ord_nodes, nodes[6], nodes[7], nodes[8], nodes[5], nodes[9])
-                elseif ord_nodes[2] == nodes[2]
-                    new_nodes = vcat(ord_nodes, nodes[5], nodes[8], nodes[7], nodes[6], nodes[9])
-                end
-            elseif ord_nodes[1] == nodes[4]  
-                if ord_nodes[2] == nodes[3]
-                    new_nodes = vcat(ord_nodes, nodes[7], nodes[8], nodes[5], nodes[6], nodes[9])
-                elseif ord_nodes[2] == nodes[1]
-                    new_nodes = vcat(ord_nodes, nodes[6], nodes[5], nodes[8], nodes[7], nodes[9])
-                end
-            elseif ord_nodes[1] == nodes[3]  
-                if ord_nodes[2] == nodes[2]
-                    new_nodes = vcat(ord_nodes, nodes[8], nodes[5], nodes[6], nodes[7], nodes[9])
-                elseif ord_nodes[2] == nodes[4]
-                    new_nodes = vcat(ord_nodes, nodes[7], nodes[6], nodes[5], nodes[8], nodes[9])
-                end
-            elseif ord_nodes[1] == nodes[2] 
-                if ord_nodes[2] == nodes[1]
-                    new_nodes = vcat(ord_nodes, nodes[5], nodes[6], nodes[7], nodes[8], nodes[9])
-                elseif ord_nodes[2] == nodes[3]
-                    new_nodes = vcat(ord_nodes, nodes[8], nodes[7], nodes[6], nodes[5], nodes[9])
-                end
-            end
-            nodes = new_nodes
-        end=#
+        # Se puede implementar aqui la orientación de los cuadriláteros
+        
         nodes = [Int64(x) for x in nodes]  
         id = Int64(id) 
         new(id, order, nodes, material, boundary_egdes, dof)
