@@ -1,82 +1,79 @@
-# Código para el simulador 2D de elementos finitos en Julia
+# Code for 2D finite element simulator in Julia
 
-En este repositorio se muestra el código creado para construir un simulador 2D de elementos finitos en Julia. A continuación se documentará la información más importante a tener en cuenta sobre el código.
+This repository shows the code created to build a 2D finite element simulator in Julia. The most important information about the code will be documented below.
 
-# Tabla de Contenidos
+# Table of Contents
 
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Futuras ampliaciones](#futurasAmpliaciones)
+- [Installation](#installation)
+- [Use](#use)
+- [Future expansions](#futureExpansions)
 
-# Instalación
-Para poder utilizar el código debes instalar varios paquetes de Julia e importar la  API de Gmsh. Los paquetes o librerías a instalar son: 
-- LinearAlgebra: Para obtener los autovalores y autovectores de la matriz de masa y rigidez
-- SimplexQuad (https://github.com/eschnett/SimplexQuad.jl): nos permite obtener los puntos de integración y los pessos según la cuadratura de Gauss-Radau.
-- Plots: para representar las mallas, así como los resultados finales
-- LaTeXStrings: para personalizar de manera matemática nuestros gráficos
+# Installation
+In order to use the code you must install several Julia packages and import the Gmsh API. The packages or libraries to install are: 
+- LinearAlgebra: To obtain the eigenvalues and eigenvectors of the mass and stiffness matrix.
+- SimplexQuad (https://github.com/eschnett/SimplexQuad.jl): allows us to obtain the integration points and the pessos according to the Gauss-Radau quadrature.
+- Plots: to represent the meshes as well as the final results.
+- LaTeXStrings: to mathematically customize our plots.
 
-## API de Gmsh
-Para utilizar la API de Gmsh necesitamos la biblioteca dinámica
-Gmsh y el módulo Julia (‘gmsh.jl’). Esto se obtiene del kit binario de desarrollo de software (SDK) disponible en el sitio web de Gmsh (https://gmsh.info/bin/), para Windows, Linux y macOS, descargando y descomprimiendo el archivo gmsh*-sdk.* correspondiente a su sistema operativo y agregando el directorio
-"lib"del SDK a JULIA_LOAD_PATH.  Una vez tengamos descargado y descomprimido el SDK, buscamos la carpeta /.julia/config,
-en caso de que no exista, tendremos que crearla. Una vez esté la carpeta creada, hay
-que crear o editar el archivo startup.jl de la siguiente forma:
+## Gmsh API
+In order to use the Gmsh API we need the dynamic library Gmsh and the Julia module ('gmsh.jl'). This is obtained from the binary software development kit (SDK) available from the Gmsh website (https://gmsh.info/bin/), for Windows, Linux, and macOS. By downloading and unzipping the gmsh*-sdk.* file corresponding to your operating system and adding the directory (lib) directory of the SDK to JULIA_LOAD_PATH.  Once we have downloaded and unzipped the SDK, we look for the /.julia/config folder.
+In case it does not exist, we will have to create it. Once the folder is created, create or edit the startup.jl file as follows:
 
 ```Julia
- # Guardamos la ruta al archivo que queremos cargar en
-JULIA_LOAD_PAD push !( LOAD_PATH , "/ ruta/al/archivo ")
+ # We save the path to the file we want to load in
+JULIA_LOAD_PAD push !( LOAD_PATH , "/path/to/file ")
 ```
 
-Este archivo startup.jl se utiliza para realizar configuraciones personalizadas y cargar paquetes o módulos específicos que deseas que estén disponibles cada vez que
-inicies Julia. Como último paso habría que reiniciar Julia.
+This startup.jl file is used to make custom configurations and load specific packages or modules that you want to be available every time you start Julia. The last step is to restart Julia.
 
-# Uso
-El código consta de una serie de módulos, donde el principal es el denominado "Numerical_integration_v1.jl". Este se encarga de llamar a "Mesh_object.jl" que a su vez llama a todos los demás. Las dependencias de los módulos se muestran en la siguiente imagen:
+
+# Use
+The code consists of a series of modules, where the main one is called "Numerical_integration_v1.jl". This is responsible for calling "Mesh_object.jl" which in turn calls all the others. The dependencies of the modules are shown in the following image:
 
 ![dependencias_código](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/2b5e0d2e-07d6-4e69-8abd-a097c1722f26)
 
-Donde las flechas muestran de quién obtine la información o de quién depende.
+Where the arrows show from whom the information is obtained or on whom it depends.
 
 ## Rect_waveguide_triangles/quads.jl 
-Estos dos fragmentos de código utilizan la API de Gmsh en Julia para la creación del objeto a utilizar. De ellas obtenos información importante como los nodos, las coordenadas de los mismos, los grupos físicos (condiciones de contorno), etc.
+These two code snippets use the Gmsh API in Julia for the creation of the object to be used. From them we get important information such as nodes, node coordinates, physical groups (boundary conditions), etc.
 
 ## Elements.jl
-Este módulo se utiliza para guardar los diferentes tipos de elementos. Se han implementado ambos elementos, triangulos y quads. Aun así, no se ha realizado la orientación de quads,la cual que queda pendiente para futuros trabajos. En este módulo se llama a "Elements_order.jl" donde se guarda el orden de los elementos transformándolo a un formato legible a partir de los códigos internos de Gmsh mostrados en esta página web: https://docs.juliahub.com/GmshTools/9rYp5/0.4.2/element_types/ .
+This module is used to store the different types of elements. Both triangles and quads have been implemented. However, the orientation of quads has not been done, which is pending for future work. In this module "Elements_order.jl" is called where the order of the elements is stored transforming it to a readable format from the internal Gmsh codes shown in this web page: https://docs.juliahub.com/GmshTools/9rYp5/0.4.2/element_types/ .
 
 ## Material.jl
-Gracias a este módulo se pueden guardar los diversos materiales de los que se compone la malla. Será útil para futuros trabajos donde se analicen mallas genéricas. De momento no tiene influencia en el código.
+Thanks to this module, the different materials of which the mesh is composed can be saved. It will be useful for future work where generic meshes are analyzed. For the moment it has no influence on the code.
 
 ## Boundary_cond.jl
-En este módulo guardamos las condiciones de contorno presentes en la malla así como todos los nodos que la sufren. Este módulo se utiliza para poder comprobar que nodos del elemento tienen determinada condición de contorno.
+In this module we store the boundary conditions present in the mesh as well as all the nodes that suffer it. This module is used to check which nodes of the element have a certain boundary condition.
 
 ## Mesh_object.jl
-Aqui se obtiene toda la información importante para ensamblar la malla. Se crean los elementos donde se tienen en cuenta las condiciones de contorno, se les asigna los grados de libertad, ect. Se guardan también los materiales de los que esta compuesta la malla así como todas las coordenadas de los nodos que la componen.
+Here you get all the important information to assemble the mesh. The elements are created where the boundary conditions are taken into account, the degrees of freedom are assigned, ect. The materials of which the mesh is composed are also saved as well as all the coordinates of the nodes that compose it.
 
-Toda esta información será necesaría para realizar los cálculos en "Numerical_integration_v1.jl".
+All this information will be necessary to perform the calculations in "Numerical_integration_v1.jl".
 
 ### Mesh_plot.jl
-En este módulo se crea un gráfico de la malla ensamblada utilizando toda la información creada y obtenida en "Mesh_object.jl". A continuación se muestran ejemplos de algunas mallas, de orden 1 y orden 2:
+In this module a graph of the assembled mesh is created using all the information created and obtained in "Mesh_object.jl". Examples of some meshes, of order 1 and order 2, are shown below:
 
 ![triangular_mesh_order_1_boundary_1](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/4d66a5eb-a339-4931-8c25-b615d9f5d46b)
 
 ![triangular_mesh_order_2_boundary_1](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/2c6c1603-00d9-4976-86e7-a3ff2871cfb7)
 
 ## Numerical_integration_v1.jl
-Este es el módulo main, ya que es donde se realizan todos los cálculos con la información obtenida hasta ahora y donde se obtienen los resultados finales. En el se calculan las matrices de masa y rigidez utilizadas para obtener los autovalores. Se puede elegir mediante el atributo 'FEM_TE' si se quiere calcular los modos TE o modos TM. 
+This is the main module, since it is where all the calculations are performed with the information obtained so far and where the final results are obtained. It calculates the mass and stiffness matrices used to obtain the eigenvalues. You can choose by means of the attribute 'FEM_TE' if you want to calculate TE modes or TM modes. 
 
-Con los autovalores obtenidos, calculamos el error relativo, el cual disminuye a medida que aumentamos el orden de los elementos y hacemos la malla más fina con el atributo 'tm' del módulo "Rect_waveguide_triangles.jl". Debemos tener en cuenta dos puntos a la hora de calcular el error relativo en función de si calculamos modos TE o TM:
-- Modos TE: el primer valor obtenido en 'k_c_fem' se utiliza como referencia, el segundo es el correspondiente al modo TE_10
+With the obtained eigenvalues, we calculate the relative error, which decreases as we increase the order of the elements and we make the mesh finer with the 'tm' attribute of the "Rect_waveguide_triangles.jl" module. We must take into account two points when calculating the relative error depending on whether we calculate TE or TM modes:
+- TE modes: the first value obtained in 'k_c_fem' is used as reference, the second is the one corresponding to TE_10 mode.
   ![resultado_modos_TE](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/b73a9988-cc92-4e41-baee-d568cc5c5d65)
 
-- Modos TM: no existen modos TM_10 o TM_01 por lo que el primer valor obtenido en 'k_c_fem' es el correspondiente al modo TM_11
+- TM modes: there are no TM_10 or TM_01 modes, so the first value obtained in 'k_c_fem' is the one corresponding to TM_11 mode.
   ![resultado_modos_TM](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/eaf11dc1-6092-47f8-9fae-81f0b001d839)
 
 ### Plot_results.jl
-Este módulo se utiliza para graficar los resultados y realizar comprobaciones sobre ellos. Aqui se ha comprobado que la tasa de convergencia del error es O(h^2p).
+This module is used to plot the results and perform checks on them. Here we have checked that the error convergence rate is O(h^2p).
 
 ![Mode_TE](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/159bb6d6-a2c8-4664-ac10-9a783ff31b60)
 
 ![Mode_TM](https://github.com/Mario22-MND/Codigo-TFG/assets/126000794/b3a7919a-edba-4cfd-aba0-0469e59ad6ed)
 
-# Futuras Ampliaciones
-El código se puede ampliar implementando las partes del código dedicadas a los cuadriláteros, así como implementando el uso de los materiales para poder resolver guias genéricas.
+# Future Expansions
+The code can be extended by implementing the parts of the code dedicated to quadrilaterals, as well as implementing the use of materials to solve generic guides.
